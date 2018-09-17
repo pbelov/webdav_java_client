@@ -1,7 +1,6 @@
 package com.pbelov.java.webdav_client;
 
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,8 +21,15 @@ public class StringUtils {
         } else {
             Utils.error(TAG, "Error: " + e.getMessage());
         }
+    }
 
-        FileUtils.writeStringToFile(e.toString(), new File("stacktrace.log"));
+    public static String toString(Enum[] enums) {
+        StringBuilder sb = new StringBuilder();
+        for (Enum anEnum : enums) {
+            sb.append(",").append(anEnum.toString());
+        }
+
+        return sb.substring(1);
     }
 
     public static boolean isEmpty(String value) {

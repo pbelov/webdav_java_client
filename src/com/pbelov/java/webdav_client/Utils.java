@@ -16,6 +16,10 @@ public class Utils {
         }
     }
 
+    public static void println(String str) {
+        println("", str);
+    }
+
     public static void println(String tag, String str) {
         System.out.println(Main.DEBUG ? tag + ": " + str : str);
     }
