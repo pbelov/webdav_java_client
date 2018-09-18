@@ -27,7 +27,7 @@ public class Main {
     private String from, to, host, user, pass;
 
     public Main(String[] args) {
-        Utils.println("", "Webdav Java Client v.0.2");
+        Utils.println("", "Webdav Java Client v.0.2.1");
         if (args == null || args.length == 0) {
             System.out.println("Usage\n");
             Utils.println("upload -from [from] -to [to] -host [protocol://host:port] -user [user] -pass [password]");
@@ -82,7 +82,6 @@ public class Main {
     }
 
     private void goDownload(Sardine sardine) throws IOException {
-        Utils.error("", "Is not implemented yet");
         List<DavResource> list = getListFrom(sardine, from);
         downloadList(sardine, list);
     }
@@ -92,15 +91,17 @@ public class Main {
             DavResource davResource = list.get(i);
             Utils.println("Downloading " + davResource);
             final String resourceName = davResource.getName();
+            final String resourcePath = davResource.getPath();
             if (!davResource.isDirectory()) {
-                InputStream is = sardine.get(host + "/" + davResource.getPath());
+                InputStream is = sardine.get(host + "/" + resourcePath);
                 File targetFile = new File(FileUtils.WORKING_DIR, to);
                 FileUtils.checkFile(targetFile);
                 targetFile.mkdir();
-                targetFile = new File(targetFile, resourceName);
+                String targetPath = targetFile.getPath() + File.separator + davResource.getPath().substring(from.length() + 2).replaceAll("/", "\\" + File.separator).replaceAll(resourceName, "");
+                targetFile = new File(targetPath, resourceName);
                 FileUtils.saveFile(is, targetFile);
             } else {
-                List<DavResource> subList = getListFrom(sardine, davResource.getPath());
+                List<DavResource> subList = getListFrom(sardine, resourcePath);
                 downloadList(sardine, subList);
             }
         }

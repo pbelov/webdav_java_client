@@ -14,21 +14,22 @@ public class FileUtils {
     public static final File WORKING_DIR = new File(Paths.get("").toAbsolutePath().toString());
     private static final String TAG = "FileUtils";
 
-    private FileUtils() {}
+    private FileUtils() {
+    }
 
     public static void checkFile(File file) {
-        if (file.isFile()) {
-            file.getParentFile().mkdirs();
-        }
+//        if (file.isFile()) {
+        file.getParentFile().mkdirs();
+//        }
     }
 
     public static void saveFile(InputStream is, File targetFile) throws IOException {
         Utils.println("Save file: " + targetFile.getAbsolutePath());
         FileUtils.checkFile(targetFile);
-        targetFile.createNewFile();
-        java.nio.file.Files.copy(is, targetFile.toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
-        IOUtils.closeQuietly(is);
+        if (targetFile.createNewFile()) {
+            java.nio.file.Files.copy(is, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+            IOUtils.closeQuietly(is);
     }
 
     public static List<File> getAllFilesFrom(File from) {
